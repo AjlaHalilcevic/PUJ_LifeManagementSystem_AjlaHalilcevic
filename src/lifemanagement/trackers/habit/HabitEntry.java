@@ -2,36 +2,39 @@ package lifemanagement.trackers.habit;
 
 import org.bson.Document;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class HabitEntry {
-    private final String username;
-    private final String habitName;
-    private final String date;
-    private final boolean done;
+    private String id;
+    private String username;
+    private String name;
+    private String frequency;
+    private boolean active;
+    private LocalDate createdAt;
 
-    public HabitEntry(String username, String habitName, String date, boolean done) {
+    public HabitEntry(String id, String username, String name, String frequency, boolean active, LocalDate createdAt) {
+        this.id = id;
         this.username = username;
-        this.habitName = habitName;
-        this.date = date;
-        this.done = done;
+        this.name = name;
+        this.frequency = frequency;
+        this.active = active;
+        this.createdAt = createdAt;
     }
 
+    public String getId() { return id; }
     public String getUsername() { return username; }
-    public String getHabitName() { return habitName; }
-    public String getDate() { return date; }
-    public boolean isDone() { return done; }
+    public String getName() { return name; }
+    public String getFrequency() { return frequency; }
+    public boolean isActive() { return active; }
+    public LocalDate getCreatedAt() { return createdAt; }
 
-    public Document toDocument() {
-        return new Document("username", username)
-                .append("habitName", habitName)
-                .append("date", date)
-                .append("done", done);
-    }
-    public static HabitEntry fromDocument(Document d) {
-        return new HabitEntry(
-                d.getString("username"),
-                d.getString("habitName"),
-                d.getString("date"),
-                d.getBoolean("done", false)
-        );
+    public void setName(String name) { this.name = name; }
+    public void setFrequency(String frequency) { this.frequency = frequency; }
+    public void setActive(boolean active) { this.active = active; }
+
+    @Override
+    public String toString() {
+    return "[" + id + "]" + name + " | freq=" + frequency + " | active=" + active + " | created=" + createdAt;
     }
 }
