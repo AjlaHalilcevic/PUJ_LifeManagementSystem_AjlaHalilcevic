@@ -1,6 +1,8 @@
 package lifemanagement.ui.swing;
 
 import lifemanagement.trackers.habit.HabitService;
+import lifemanagement.trackers.sleep.SleepService;
+import lifemanagement.ui.swing.SleepTrackerFrame;
 import lifemanagement.ui.swing.HabitTrackerFrame;
 
 import javax.swing.*;
@@ -8,9 +10,11 @@ import java.awt.*;
 
 public class MainMenuFrame extends JFrame {
     private final HabitService habitService;
+    private final SleepService sleepService;
 
-    public MainMenuFrame(HabitService habitService) {
+    public MainMenuFrame(HabitService habitService, SleepService sleepService) {
         this.habitService = habitService;
+        this.sleepService = sleepService;
 
         setTitle("Life Management System - Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +40,7 @@ public class MainMenuFrame extends JFrame {
 
         // TODO:
         financeBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Finance UI (Project 1 integration)"));
-        sleepBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Sleep Tracker UI"));
+        sleepBtn.addActionListener(e -> new SleepTrackerFrame(sleepService).setVisible(true));
         studyBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Study Tracker UI"));
         habitBtn.addActionListener(e -> new HabitTrackerFrame(habitService).setVisible(true));
         accountBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Account Details UI"));
