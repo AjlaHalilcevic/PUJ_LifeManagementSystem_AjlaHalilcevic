@@ -58,7 +58,7 @@ public class StudyTrackerMenu {
         System.out.println("Saved. ID = " + id);
     }
     private void viewRecords() {
-        List<StudyRecord> records = studyService.getRecordsForUser(Session.username);
+        List<StudyRecord> records = studyService.getForUser(Session.username);
 
         if (records.isEmpty()) {
             System.out.println("No study records yet.");
@@ -73,7 +73,7 @@ public class StudyTrackerMenu {
         System.out.println("\n--- Update study record ---");
         String id = prompt("Record id to update: ");
 
-        StudyRecord r = studyService.findById(id);
+        StudyRecord r = studyService.findById(id, Session.username);
         if (r == null || !r.getUsername().equals(Session.username)) {
             System.out.println("Not found.");
             return;
