@@ -1,16 +1,10 @@
 package lifemanagement.trackers.habit;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import lifemanagement.db.MongoDBConnection;
-import org.bson.Document;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Updates.set;
 
 public class HabitService {
     private final List<HabitEntry> habits = new ArrayList<>();
