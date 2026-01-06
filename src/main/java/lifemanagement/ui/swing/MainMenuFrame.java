@@ -1,6 +1,7 @@
 package lifemanagement.ui.swing;
 
 import lifemanagement.account.AccountDetailsService;
+import lifemanagement.analytics.AnalyticsFrame;
 import lifemanagement.trackers.habit.HabitService;
 import lifemanagement.trackers.sleep.SleepService;
 import lifemanagement.trackers.study.StudyService;
@@ -40,6 +41,7 @@ public class MainMenuFrame extends JFrame {
         JButton calendarBtn = new JButton("Calendar tracker");
         JButton studyBtn = new JButton("Study tracker");
         JButton habitBtn = new JButton("Habit tracker");
+        JButton analyticsBtn = new JButton("Analytic");
 
         grid.add(accountBtn);
         grid.add(financeBtn);
@@ -47,6 +49,7 @@ public class MainMenuFrame extends JFrame {
         grid.add(calendarBtn);
         grid.add(studyBtn);
         grid.add(habitBtn);
+        grid.add(analyticsBtn);
 
         financeBtn.addActionListener(e -> new FinanceTrackerFrame().setVisible(true));
         sleepBtn.addActionListener(e -> new SleepTrackerFrame(sleepService).setVisible(true));
@@ -54,6 +57,7 @@ public class MainMenuFrame extends JFrame {
         habitBtn.addActionListener(e -> new HabitTrackerFrame(habitService).setVisible(true));
         accountBtn.addActionListener(e -> new AccountDetailsFrame().setVisible(true));
         calendarBtn.addActionListener(e -> new CalendarTrackerFrame(calendarService).setVisible(true));
+        analyticsBtn.addActionListener(e -> new AnalyticsFrame(habitService, sleepService, studyService, calendarService).setVisible(true));
 
         setContentPane(grid);
     }
