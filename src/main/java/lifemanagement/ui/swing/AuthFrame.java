@@ -1,7 +1,10 @@
 package lifemanagement.ui.swing;
 
 import lifemanagement.auth.UserManager;
+import lifemanagement.trackers.calendar.CalendarService;
 import lifemanagement.trackers.habit.HabitService;
+import lifemanagement.trackers.sleep.SleepService;
+import lifemanagement.trackers.study.StudyService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,14 +12,21 @@ import java.awt.*;
 public class AuthFrame extends JFrame {
     private final UserManager userManager = new UserManager();
     private final HabitService habitService = new HabitService();
+    private final SleepService sleepService = new SleepService();
+    private final StudyService studyService = new StudyService();
+    private final CalendarService calendarService = new CalendarService();
 
     private final JTextField usernameField = new JTextField(16);
     private final JPasswordField passwordField = new JPasswordField(16);
-
+    private final JComboBox<String> themeCombo = new JComboBox<>(new String[]{
+            "default",
+            "dark",
+            "light"
+    });
     public AuthFrame() {
         setTitle("Life Management System - Login/Register");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(420, 260);
+        setSize(420, 300);
         setLocationRelativeTo(null);
 
         JPanel root = new JPanel(new BorderLayout(12, 12));
@@ -26,11 +36,13 @@ public class AuthFrame extends JFrame {
         title.setFont(title.getFont().deriveFont(Font.BOLD, 18f));
         root.add(title, BorderLayout.NORTH);
 
-        JPanel form = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel form = new JPanel(new GridLayout(3, 2, 10, 10));
         form.add(new JLabel("Username:"));
         form.add(usernameField);
         form.add(new JLabel("Password:"));
         form.add(passwordField);
+        form.add(new JLabel("Theme:"));
+        form.add(themeCombo);
 
         root.add(form, BorderLayout.CENTER);
 
@@ -60,20 +72,21 @@ public class AuthFrame extends JFrame {
         if (ok) {
             JOptionPane.showMessageDialog(this, "Login successful!");
             dispose();
-            new MainMenuFrame(habitService).setVisible(true);
+            new MainMenuFrame(habitService, sleepService, studyService, calendarService).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Wrong username/password.");
         }
     }
     private void doRegister() {
         String username = usernameField.getText().trim();
-        String password = new String(passwordField.getPassword());
+        String password = new String(passwordField.getPassword()).trim();
+        String theme = (String) themeCombo.getSelectedItem();
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Enter username and password.");
             return;
         }
-            boolean ok = userManager.register(username, password);
+            boolean ok = userManager.register(username, password, theme);
 
             if (ok) {
                 JOptionPane.showMessageDialog(this, "Registered successfully. Now login.");

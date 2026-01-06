@@ -2,7 +2,6 @@ package lifemanagement.auth;
 
 import lifemanagement.mainmenu.MainMenu;
 import java.util.Scanner;
-import lifemanagement.auth.Session;
 
 public class AuthMenu {
     private final Scanner sc = new Scanner(System.in);

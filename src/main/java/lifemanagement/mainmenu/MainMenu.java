@@ -3,7 +3,6 @@ package lifemanagement.mainmenu;
 import lifemanagement.auth.AuthMenu;
 import lifemanagement.auth.Session;
 
-import java.util.Calendar;
 import java.util.Scanner;
 
 //TODO:

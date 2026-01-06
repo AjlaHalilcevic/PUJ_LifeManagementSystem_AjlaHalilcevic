@@ -5,8 +5,6 @@ import com.mongodb.client.MongoDatabase;
 import lifemanagement.db.MongoDBConnection;
 import org.bson.Document;
 
-import javax.print.Doc;
-
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
@@ -33,6 +31,7 @@ public class UserManager {
 
         Session.username = username;
         Session.theme = d.getString("theme");
+        if (Session.theme == null) Session.theme = "default";
         return true;
     }
 
@@ -46,5 +45,19 @@ public class UserManager {
             Session.username = null;
             Session.theme = "default";
         }
+    }
+    public boolean register(String username, String password, String theme) {
+        if (username == null || password == null) return false;
+        username = username.trim();
+        if (username.isEmpty() ||  password.isEmpty()) return false;
+        if (theme == null || theme.trim().isEmpty()) theme = "default";
+        if (users.find(eq("username", username)).first() != null) {
+            return false;
+        }
+        Document doc = new Document("username", username)
+                .append("password", password)
+                .append("theme", theme);
+        users.insertOne(doc);
+        return true;
     }
 }
