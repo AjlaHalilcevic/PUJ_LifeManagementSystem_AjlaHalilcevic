@@ -1,9 +1,15 @@
 package lifemanagement.ui.swing;
 
+import lifemanagement.account.AccountDetailsService;
 import lifemanagement.trackers.habit.HabitService;
 import lifemanagement.trackers.sleep.SleepService;
+import lifemanagement.trackers.study.StudyService;
+import lifemanagement.trackers.calendar.CalendarService;
 import lifemanagement.ui.swing.SleepTrackerFrame;
 import lifemanagement.ui.swing.HabitTrackerFrame;
+import lifemanagement.ui.swing.StudyTrackerFrame;
+import lifemanagement.ui.swing.CalendarTrackerFrame;
+import lifemanagement.ui.swing.FinanceTrackerFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +17,14 @@ import java.awt.*;
 public class MainMenuFrame extends JFrame {
     private final HabitService habitService;
     private final SleepService sleepService;
+    private final StudyService studyService;
+    private final CalendarService calendarService;
 
-    public MainMenuFrame(HabitService habitService, SleepService sleepService) {
+    public MainMenuFrame(HabitService habitService, SleepService sleepService, StudyService studyService, CalendarService calendarService) {
         this.habitService = habitService;
         this.sleepService = sleepService;
+        this.studyService = studyService;
+        this.calendarService = calendarService;
 
         setTitle("Life Management System - Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,13 +48,12 @@ public class MainMenuFrame extends JFrame {
         grid.add(studyBtn);
         grid.add(habitBtn);
 
-        // TODO:
-        financeBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Finance UI (Project 1 integration)"));
+        financeBtn.addActionListener(e -> new FinanceTrackerFrame().setVisible(true));
         sleepBtn.addActionListener(e -> new SleepTrackerFrame(sleepService).setVisible(true));
-        studyBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Study Tracker UI"));
+        studyBtn.addActionListener(e -> new StudyTrackerFrame(studyService).setVisible(true));
         habitBtn.addActionListener(e -> new HabitTrackerFrame(habitService).setVisible(true));
-        accountBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Account Details UI"));
-        calendarBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Open Calendar Tracker UI"));
+        accountBtn.addActionListener(e -> new AccountDetailsFrame().setVisible(true));
+        calendarBtn.addActionListener(e -> new CalendarTrackerFrame(calendarService).setVisible(true));
 
         setContentPane(grid);
     }

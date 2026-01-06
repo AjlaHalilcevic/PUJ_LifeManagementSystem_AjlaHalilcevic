@@ -1,29 +1,35 @@
 package lifemanagement.trackers.habit;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
+import lifemanagement.db.MongoDBConnection;
+import org.bson.Document;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
-
 public class HabitService {
-    private final List<HabitEntry> habits = new ArrayList<>();
+    private final MongoCollection<Document> col =
+            MongoDBConnection.getDatabase().getCollection("habit_entries");
 
     public void add(HabitEntry h) {
-        habits.add(h);
+        col.insertOne(toDoc(h));
     }
     public List<HabitEntry> getForUser(String username) {
-        List<HabitEntry> result = new ArrayList<>();
-        for (HabitEntry h : habits) {
-            if (h.getUsername().equals(username)) result.add(h);
+        List<HabitEntry> list = new ArrayList<>();
+        for (Document d : col.find(Filters.eq("username", username))) {
+            list.add(fromDoc(d));
         }
-        return result;
+        return list;
     }
     public HabitEntry findById(String id, String username) {
-    for (HabitEntry h : habits) {
-        if (h.getId().equals(id) && h.getUsername().equals(username)) return h;
-    }
-    return null;
+        Document d = col.find(Filters.and(
+                Filters.eq("id", id),
+                Filters.eq("username", username)
+        )).first();
+        return d == null ? null : fromDoc(d);
     }
     public boolean update(String id, String username, String newName, String newFrequency, Boolean newActive) {
         HabitEntry h = findById(id, username);
@@ -33,12 +39,36 @@ public class HabitService {
         if (newFrequency != null) h.setFrequency(newFrequency);
         if (newActive != null) h.setActive(newActive);
 
-        return true;
+        return col.replaceOne(
+                Filters.and(Filters.eq("id", id),
+                        Filters.eq("username", username)),
+                toDoc(h),
+                new ReplaceOptions().upsert(false)).getModifiedCount() > 0;
     }
 
     public boolean deleteById(String id, String username) {
-        HabitEntry h = findById(id, username);
-        if (h == null) return false;
-        return habits.remove(h);
+       return col.deleteOne(Filters.and(
+               Filters.eq("id", id),
+               Filters.eq("username", username)
+       )).getDeletedCount() > 0;
+    }
+    private Document toDoc(HabitEntry h) {
+        return new Document()
+                .append("id", h.getId())
+                .append("username", h.getUsername())
+                .append("name", h.getName())
+                .append("frequency", h.getFrequency())
+                .append("active", h.isActive())
+                .append("createdAt",h.getCreatedAt().toString());
+    }
+    private HabitEntry fromDoc(Document d) {
+        return new HabitEntry(
+                d.getString("id"),
+                d.getString("username"),
+                d.getString("name"),
+                d.getString("frequency"),
+                d.getBoolean("active", true),
+                LocalDate.parse(d.getString("createdAt"))
+        );
     }
 }

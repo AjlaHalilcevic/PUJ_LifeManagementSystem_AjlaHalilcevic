@@ -107,7 +107,7 @@ public class CalendarTrackerMenu {
         String id = prompt("Event id to update: ");
         String username = Session.username;
 
-        CalendarEvent e = calendarService.findById(id);
+        CalendarEvent e = calendarService.findById(id, username);
         if (e == null) {
             System.out.println("Not found.");
             return;

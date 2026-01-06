@@ -78,7 +78,7 @@ public class SleepTrackerFrame extends JFrame {
             SleepEntry entry = new SleepEntry(id, username, date, hours, good);
             sleepService.add(entry);
 
-            JOptionPane.showMessageDialog(this, "Sačuvano!. ID: " + id);
+            JOptionPane.showMessageDialog(this, "Sačuvano! ID: " + id);
             refreshList();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Neispravan unos. Provjerite datum (yyyy-mm-dd) i sate (npr. 7.5)" + ex.getMessage());
